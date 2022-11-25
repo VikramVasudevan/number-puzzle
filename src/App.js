@@ -1,7 +1,7 @@
 import logo from './logo.svg';
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { NumberGrid, NumberGridTest, uniqueRandomNumbers, NumberPuzzleTimer } from './NumberGrid/NumberGrid';
+import { NumberGrid,  uniqueRandomNumbers } from './NumberGrid/NumberGrid';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';

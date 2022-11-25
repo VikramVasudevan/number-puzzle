@@ -136,20 +136,6 @@ export function NumberGridTest(props) {
     );
 }
 
-export function NumberPuzzleTimer(props) {
-    const [count, setCount] = useState(1);
-
-    let interval = setInterval(() => {
-        setCount(count + 1);
-    }, 1000);
-
-    return (
-        <div>
-            <p className="text-primary">: {count}</p>
-        </div>
-    );
-}
-
 function getNumberOfMovesAlert(movesCount) {
     let str = `Number of moves = ${movesCount}`
     if (movesCount > 20) {
@@ -211,7 +197,7 @@ export function NumberGrid(props) {
             const formattedSeconds = ("" + seconds).padStart(2, "0")
 
             const formattedTime = `${formattedHours}:${formattedMinutes}:${formattedSeconds}`
-            if (hours == 0 && minutes == 0 && seconds < 20)
+            if (hours === 0 && minutes === 0 && seconds < 20)
                 return (
                     <Alert variant='danger'>
                         <span>{formattedTime}</span>
