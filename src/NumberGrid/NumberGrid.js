@@ -7,6 +7,7 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Card from 'react-bootstrap/Card';
 import Countdown from 'react-countdown';
+import './NumberGrid.css';
 
 export function uniqueRandomNumbers(max, qty, gridDimensions) {
     const retVal = new Set();
@@ -57,7 +58,7 @@ function moveButton(row, col, grid, setGrid) {
             && neighbourCoordinate.col >= 0 && neighbourCoordinate.col < grid.numCols) {
             let neighbour = grid.assignments[neighbourCoordinate.row][neighbourCoordinate.col];
             console.debug("neighbour = ", neighbour);
-            if (!neighbour.value)
+            if (typeof neighbour.value == 'undefined')
                 availableNeighbours.push(neighbour);
         }
 
@@ -80,14 +81,40 @@ function swapNeighbours(row, col, availableNeighbour, grid, setGrid) {
 }
 
 function getButton(grid, setGrid, row, col) {
-    let buttonObj;
-
     try {
-        buttonObj = grid.assignments[row][col];
-        if (typeof buttonObj.value != 'undefined')
-            return <Button onClick={() => moveButton(row, col, grid, setGrid)} disabled={grid.disabled ? 'disabled' : null}>{buttonObj.value}</Button>
+        const currentButtonVal = getCurrentButtonVal(grid, setGrid, row, col);
+        const previousButtonVal = getPreviousButtonVal(grid, setGrid, row, col);
+        let className = "primary";
+        if (row == 0 && col == 0) {
+
+        }
+        else if (typeof previousButtonVal == 'undefined' || currentButtonVal < previousButtonVal) {
+            className = "danger"
+        }
+        else className = "success"
+        if (typeof currentButtonVal != 'undefined')
+            return <Button className="number-button" variant={className} onClick={() => moveButton(row, col, grid, setGrid)} disabled={grid.disabled ? 'disabled' : null}>{currentButtonVal}</Button>
+        else
+            return <Button className="number-button" variant="secondary" disabled>&nbsp;</Button>
     } catch (e) {
         console.error(e);
+    }
+}
+
+function getCurrentButtonVal(grid, setGrid, row, col) {
+    if (!grid.assignments[row]) return undefined;
+    if (typeof grid.assignments[row][col] === 'undefined') return undefined;
+
+    return grid.assignments[row][col].value;
+}
+
+function getPreviousButtonVal(grid, setGrid, row, col) {
+    if (col > 0) {
+        return getCurrentButtonVal(grid, setGrid, row, col - 1);
+    } else {
+        const previousRow = grid.assignments[row - 1];
+        const lastCol = grid.assignments[row - 1]?.length - 1;
+        return getCurrentButtonVal(grid, setGrid, row - 1, lastCol);
     }
 }
 
@@ -221,11 +248,12 @@ export function NumberGrid(props) {
             <Card className="card-primary">
                 <Card.Body>
                     <h2 className="text-primary">
-                        Number Puzzle
+                        Number Slide Puzzle
                     </h2>
                     <h3 className="text-secondary">
                         [{grid.numRows} * {grid.numCols} Grid]
                     </h3>
+                    <p className="text-primary">Objective : Sort the number grid in ascending order.</p>
                     <Form.Group className="mb-3" controlId="formGridRows" onChange={e => changeGridSize('rows', e.target.value)}>
                         <Container fluid>
                             <Row>
@@ -257,7 +285,7 @@ export function NumberGrid(props) {
             </Card>
 
             {getNumberOfMovesAlert(movesCount)}
-            <Countdown date={grid.startTime + 30000} renderer={renderer} />
+            <Countdown date={grid.startTime + 120000} renderer={renderer} />
             <div>
                 <table>
                     <tbody>
