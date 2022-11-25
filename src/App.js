@@ -1,19 +1,22 @@
 import logo from './logo.svg';
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { NumberGrid,  uniqueRandomNumbers } from './NumberGrid/NumberGrid';
+import { NumberGrid, uniqueRandomNumbers } from './NumberGrid/NumberGrid';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 
 let initialGrid = {
-  maxNumber: 100,
+  maxNumber: 14,
   numRows: 4,
   numCols: 4,
   assignments: undefined,
-  disabled : false,
-  startTime : Date.now()
+  disabled: false,
+  startTime: Date.now()
 };
+
+if (initialGrid.maxNumber < initialGrid.numRows * initialGrid.numCols)
+  initialGrid.maxNumber = initialGrid.numRows * initialGrid.numCols;
 
 initialGrid.assignments = uniqueRandomNumbers(initialGrid.maxNumber, initialGrid.numRows * initialGrid.numCols - 1, { numRows: initialGrid.numRows, numCols: initialGrid.numCols });
 

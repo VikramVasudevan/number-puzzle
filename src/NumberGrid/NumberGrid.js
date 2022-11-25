@@ -85,7 +85,7 @@ function getButton(grid, setGrid, row, col) {
     try {
         buttonObj = grid.assignments[row][col];
         if (typeof buttonObj.value != 'undefined')
-            return <Button onClick={() => moveButton(row, col, grid, setGrid)} disabled={grid.disabled?'disabled':null}>{buttonObj.value}</Button>
+            return <Button onClick={() => moveButton(row, col, grid, setGrid)} disabled={grid.disabled ? 'disabled' : null}>{buttonObj.value}</Button>
     } catch (e) {
         console.error(e);
     }
@@ -167,6 +167,9 @@ export function NumberGrid(props) {
             newGrid.numRows = newVal;
         else if (changeType === 'cols')
             newGrid.numCols = newVal;
+
+        if (newGrid.maxNumber < newGrid.numRows * newGrid.numCols)
+            newGrid.maxNumber = newGrid.numRows * newGrid.numCols;
 
         newGrid.assignments = uniqueRandomNumbers(newGrid.maxNumber, newGrid.numRows * newGrid.numCols - 1, { numRows: newGrid.numRows, numCols: newGrid.numCols });
         newGrid.startTime = Date.now();
