@@ -10,32 +10,84 @@ function uniqueRandomNumbers(max, qty) {
   while (retVal.size < qty) {
     retVal.add(Math.floor(Math.random() * max));
   }
-  return Array.from(retVal);
+  const arr = Array.from(retVal);
+  let assignments = [];
+  for (var row = 0; row < 3; row++) {
+    assignments.push([]);
+    for (var col = 0; col < 3; col++) {
+      var obj = {
+        row: row,
+        col: col,
+        value: arr[3 * row + (col)]
+      };
+      assignments[row].push(obj);
+    }
+  }
+  console.log("assignments = ", assignments);
+  return assignments;
 }
 
 const grid = {
   numRows: 3,
   numCols: 3,
-  randomNumbers: uniqueRandomNumbers(100, 8)
+  assignments: uniqueRandomNumbers(100, 8)
 }
 
 console.log("grid = ", grid);
 
-function moveButton(pos) {
-  console.log('Moving button ', pos, grid.randomNumbers[pos])
+function moveButton(row, col) {
+  console.log('Moving button ', row, col, grid.assignments[row][col])
+  let neighbours = [];
+  let neighbourCoordinates = [
+    {
+      row: row - 1,
+      col: col
+    },
+    {
+      row: row + 1,
+      col: col
+    }, {
+      row: row,
+      col: col - 1
+    }, {
+      row: row,
+      col: col + 1
+    }
+  ];
+
+  neighbourCoordinates.forEach(neighbourCoordinate => {
+    console.log("neighbourCoordinate = ", neighbourCoordinate)
+    if (neighbourCoordinate.row >= 0 && neighbourCoordinate.row < grid.numRows
+      && neighbourCoordinate.col >= 0 && neighbourCoordinate.col < grid.numCols) {
+      let neighbour = grid.assignments[neighbourCoordinate.row][neighbourCoordinate.col];
+      console.log("neighbour = ", neighbour);
+      if (neighbour.value)
+        neighbours.push(neighbour);
+    }
+
+  })
+
+  console.log("neighbours = ", neighbours);
 }
 
-function getButton(pos) {
-  if(pos < grid.randomNumbers.length)
-    return <Button data-pos={pos} onClick={() => moveButton(pos)}>{pos} =  {grid.randomNumbers[pos]}</Button>
+function getButton(row, col) {
+  let buttonObj;
+
+  try {
+    buttonObj = grid.assignments[row][col];
+    if (buttonObj.value)
+      return <Button onClick={() => moveButton(row, col)}>{row},{col} =  {buttonObj.value}</Button>
+  } catch (e) {
+    console.error(e);
+  }
 }
 
 function getColumns(rowNumber) {
   return Array(3).fill().map(function (v, colNumber) {
-    let pos = 3 * (rowNumber ) + (colNumber);
+    let pos = 3 * (rowNumber) + (colNumber);
     return <td>
       {
-        getButton(pos)
+        getButton(rowNumber, colNumber)
       }
     </td>
   })
