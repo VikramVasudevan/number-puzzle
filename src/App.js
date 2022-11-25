@@ -2,7 +2,7 @@ import logo from './logo.svg';
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-import Button from 'react-bootstrap/Button';
+import { NumberGrid } from './NumberGrid/NumberGrid';
 
 function uniqueRandomNumbers(max, qty) {
   const retVal = new Set();
@@ -12,13 +12,13 @@ function uniqueRandomNumbers(max, qty) {
   }
   const arr = Array.from(retVal);
   let assignments = [];
-  for (var row = 0; row < 3; row++) {
+  for (var row = 0; row < initialGrid.numRows; row++) {
     assignments.push([]);
-    for (var col = 0; col < 3; col++) {
+    for (var col = 0; col < initialGrid.numCols; col++) {
       var obj = {
         row: row,
         col: col,
-        value: arr[3 * row + (col)]
+        value: arr[initialGrid.numCols * row + (col)]
       };
       assignments[row].push(obj);
     }
@@ -27,80 +27,18 @@ function uniqueRandomNumbers(max, qty) {
   return assignments;
 }
 
-const grid = {
-  numRows: 3,
-  numCols: 3,
-  assignments: uniqueRandomNumbers(100, 8)
-}
+let initialGrid = {
+  numRows: 4,
+  numCols: 4,
+  assignments: undefined
+};
 
-console.log("grid = ", grid);
+initialGrid.assignments = uniqueRandomNumbers(100, initialGrid.numRows * initialGrid.numCols - 1);
 
-function moveButton(row, col) {
-  console.log('Moving button ', row, col, grid.assignments[row][col])
-  let neighbours = [];
-  let neighbourCoordinates = [
-    {
-      row: row - 1,
-      col: col
-    },
-    {
-      row: row + 1,
-      col: col
-    }, {
-      row: row,
-      col: col - 1
-    }, {
-      row: row,
-      col: col + 1
-    }
-  ];
+console.log("grid = ", initialGrid);
 
-  neighbourCoordinates.forEach(neighbourCoordinate => {
-    console.log("neighbourCoordinate = ", neighbourCoordinate)
-    if (neighbourCoordinate.row >= 0 && neighbourCoordinate.row < grid.numRows
-      && neighbourCoordinate.col >= 0 && neighbourCoordinate.col < grid.numCols) {
-      let neighbour = grid.assignments[neighbourCoordinate.row][neighbourCoordinate.col];
-      console.log("neighbour = ", neighbour);
-      if (neighbour.value)
-        neighbours.push(neighbour);
-    }
-
-  })
-
-  console.log("neighbours = ", neighbours);
-}
-
-function getButton(row, col) {
-  let buttonObj;
-
-  try {
-    buttonObj = grid.assignments[row][col];
-    if (buttonObj.value)
-      return <Button onClick={() => moveButton(row, col)}>{row},{col} =  {buttonObj.value}</Button>
-  } catch (e) {
-    console.error(e);
-  }
-}
-
-function getColumns(rowNumber) {
-  return Array(3).fill().map(function (v, colNumber) {
-    let pos = 3 * (rowNumber) + (colNumber);
-    return <td>
-      {
-        getButton(rowNumber, colNumber)
-      }
-    </td>
-  })
-}
-
-function getRows() {
-  return Array(3).fill().map(function (v, i) {
-    return <tr>
-      {getColumns(i)}
-    </tr>
-  })
-}
 function App() {
+
   return (
     <div className="App">
       <header className="App-header">
@@ -108,7 +46,7 @@ function App() {
 
         <table>
           <tbody>
-            {getRows()}
+            <NumberGrid initialGrid={initialGrid}></NumberGrid>
           </tbody>
         </table>
       </header>
