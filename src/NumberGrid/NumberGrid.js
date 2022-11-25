@@ -75,9 +75,29 @@ function swapNeighbours(row, col, availableNeighbour, grid, setGrid) {
     let backupValue = tempGrid.assignments[row][col].value;
     tempGrid.assignments[row][col].value = undefined;
     tempGrid.assignments[availableNeighbour.row][availableNeighbour.col].value = backupValue;
+    const sorted = checkIfNumbersAreSorted(tempGrid);
+    console.log('sorted  = ', sorted);
+    if (sorted) {
+        // Game Over disable grid
+        tempGrid.disabled = true;
+    }
 
     setGrid(tempGrid);
     console.debug('new grid = ', tempGrid);
+}
+
+function checkIfNumbersAreSorted(grid) {
+    let sorted = false;
+    let prevCell = -1;
+    grid.assignments.forEach(row => {
+        row.forEach(col => {
+            if (col.value < prevCell) {
+                sorted &= false;
+            } else
+                sorted &= true;
+        })
+    })
+    return sorted;
 }
 
 function getButton(grid, setGrid, row, col) {
