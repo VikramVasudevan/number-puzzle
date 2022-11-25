@@ -5,6 +5,8 @@ import Form from 'react-bootstrap/Form';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
+import Card from 'react-bootstrap/Card';
+import Countdown from 'react-countdown';
 
 export function uniqueRandomNumbers(max, qty, gridDimensions) {
     const retVal = new Set();
@@ -83,7 +85,7 @@ function getButton(grid, setGrid, row, col) {
     try {
         buttonObj = grid.assignments[row][col];
         if (typeof buttonObj.value != 'undefined')
-            return <Button onClick={() => moveButton(row, col, grid, setGrid)}>{buttonObj.value}</Button>
+            return <Button onClick={() => moveButton(row, col, grid, setGrid)} disabled={grid.disabled?'disabled':null}>{buttonObj.value}</Button>
     } catch (e) {
         console.error(e);
     }
@@ -134,6 +136,20 @@ export function NumberGridTest(props) {
     );
 }
 
+export function NumberPuzzleTimer(props) {
+    const [count, setCount] = useState(1);
+
+    let interval = setInterval(() => {
+        setCount(count + 1);
+    }, 1000);
+
+    return (
+        <div>
+            <p className="text-primary">: {count}</p>
+        </div>
+    );
+}
+
 function getNumberOfMovesAlert(movesCount) {
     let str = `Number of moves = ${movesCount}`
     if (movesCount > 20) {
@@ -177,40 +193,81 @@ export function NumberGrid(props) {
 
     useEffect(() => {
         console.log("movesCount updated ...", movesCount);
-    }, [movesCount])
+    }, [movesCount]);
+
+    // Renderer callback with condition
+    const renderer = ({ hours, minutes, seconds, completed }) => {
+        if (completed) {
+            let newGrid = JSON.parse(JSON.stringify(grid));
+            newGrid.disabled = true;
+            setGrid(newGrid);
+            // Render a completed state
+            return <Alert variant='danger'>Time's up !</Alert>;
+        } else {
+            // Render a countdown
+            const formattedHours = ("" + hours).padStart(2, "0");
+            const formattedMinutes = ("" + minutes).padStart(2, "0")
+            const formattedSeconds = ("" + seconds).padStart(2, "0")
+
+            const formattedTime = `${formattedHours}:${formattedMinutes}:${formattedSeconds}`
+            if (hours == 0 && minutes == 0 && seconds < 20)
+                return (
+                    <Alert variant='danger'>
+                        <span>{formattedTime}</span>
+                    </Alert>
+                )
+            else
+                return (
+                    <Alert variant='primary'>
+                        <span>{formattedTime}</span>
+                    </Alert>
+                )
+
+        }
+    };
 
     return (
         <div>
-            <Form.Group className="mb-3" controlId="formGridRows" onChange={e => changeGridSize('rows', e.target.value)}>
-                <Container fluid>
-                    <Row>
-                        <Col>
-                            <Form.Text className="text-muted">
-                                Grid Rows
-                            </Form.Text>
-                        </Col>
-                        <Col><Form.Control type="number" placeholder="Grid Rows" value={grid.numRows} /></Col>
-                    </Row>
-                </Container>
+            <Card className="card-primary">
+                <Card.Body>
+                    <h2 className="text-primary">
+                        Number Puzzle
+                    </h2>
+                    <h3 className="text-secondary">
+                        [{grid.numRows} * {grid.numCols} Grid]
+                    </h3>
+                    <Form.Group className="mb-3" controlId="formGridRows" onChange={e => changeGridSize('rows', e.target.value)}>
+                        <Container fluid>
+                            <Row>
+                                <Col>
+                                    <Form.Text className="text-muted">
+                                        Grid Rows
+                                    </Form.Text>
+                                </Col>
+                                <Col><Form.Control type="number" placeholder="Grid Rows" value={grid.numRows} /></Col>
+                            </Row>
+                        </Container>
 
 
-            </Form.Group>
+                    </Form.Group>
 
-            <Form.Group className="mb-3" controlId="formGridColumns" onChange={e => changeGridSize('cols', e.target.value)}>
-                <Container fluid>
-                    <Row>
-                        <Col>
-                            <Form.Text className="text-muted">
-                                Grid Columns
-                            </Form.Text>
-                        </Col>
-                        <Col><Form.Control type="number" placeholder="Grid Rows" value={grid.numCols} /></Col>
-                    </Row>
-                </Container>
-            </Form.Group>
+                    <Form.Group className="mb-3" controlId="formGridColumns" onChange={e => changeGridSize('cols', e.target.value)}>
+                        <Container fluid>
+                            <Row>
+                                <Col>
+                                    <Form.Text className="text-muted">
+                                        Grid Columns
+                                    </Form.Text>
+                                </Col>
+                                <Col><Form.Control type="number" placeholder="Grid Rows" value={grid.numCols} /></Col>
+                            </Row>
+                        </Container>
+                    </Form.Group>
+                </Card.Body>
+            </Card>
 
-            <h1>{grid.numRows} * {grid.numCols} Grid</h1>
             {getNumberOfMovesAlert(movesCount)}
+            <Countdown date={Date.now() + 30000} renderer={renderer} />
             <div>
                 <table>
                     <tbody>
