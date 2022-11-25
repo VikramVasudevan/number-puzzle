@@ -186,15 +186,13 @@ export function NumberGridTest(props) {
 function getNumberOfMovesAlert(movesCount) {
     let str = `Number of moves = ${movesCount}`
     if (movesCount > 20) {
-        return (<Alert variant="danger">{str}</Alert>);
+        return (<span className="text-danger">{str}</span>);
     }
     else if (movesCount > 10) {
-        return (<Alert variant="warning">{str}</Alert>);
+        return (<span className="text-warning">{str}</span>);
     }
     else
-        return (<Alert variant="success">
-            Number of moves - {movesCount}
-        </Alert>);
+        return (<span className="text-success">{str}</span>);
 }
 
 export function NumberGrid(props) {
@@ -304,7 +302,6 @@ export function NumberGrid(props) {
                 </Card.Body>
             </Card>
 
-            {getNumberOfMovesAlert(movesCount)}
             <Countdown date={grid.startTime + 120000} renderer={renderer} />
             <div>
                 <table>
@@ -312,6 +309,7 @@ export function NumberGrid(props) {
                         {renderGrid(grid, setGridState)}
                     </tbody>
                 </table>
+                {getNumberOfMovesAlert(movesCount)}
             </div>
         </div>
     );
