@@ -11,7 +11,8 @@ let initialGrid = {
   numRows: 4,
   numCols: 4,
   assignments: undefined,
-  disabled : false
+  disabled : false,
+  startTime : Date.now()
 };
 
 initialGrid.assignments = uniqueRandomNumbers(initialGrid.maxNumber, initialGrid.numRows * initialGrid.numCols - 1, { numRows: initialGrid.numRows, numCols: initialGrid.numCols });

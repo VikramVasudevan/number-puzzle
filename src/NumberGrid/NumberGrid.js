@@ -183,6 +183,7 @@ export function NumberGrid(props) {
             newGrid.numCols = newVal;
 
         newGrid.assignments = uniqueRandomNumbers(newGrid.maxNumber, newGrid.numRows * newGrid.numCols - 1, { numRows: newGrid.numRows, numCols: newGrid.numCols });
+        newGrid.startTime = Date.now();
         setMovesCount(0);
         setGrid(newGrid);
     }
@@ -267,7 +268,7 @@ export function NumberGrid(props) {
             </Card>
 
             {getNumberOfMovesAlert(movesCount)}
-            <Countdown date={Date.now() + 30000} renderer={renderer} />
+            <Countdown date={grid.startTime + 30000} renderer={renderer} />
             <div>
                 <table>
                     <tbody>
