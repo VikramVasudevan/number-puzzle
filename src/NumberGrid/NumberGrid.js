@@ -1,5 +1,5 @@
 import Button from 'react-bootstrap/Button';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 function moveButton(row, col, grid, setGrid) {
     console.debug('Moving button ', row, col, grid.assignments[row][col])
@@ -40,12 +40,13 @@ function moveButton(row, col, grid, setGrid) {
 }
 
 function swapNeighbours(row, col, availableNeighbour, grid, setGrid) {
-    let backupValue = grid.assignments[row][col].value;
-    grid.assignments[row][col].value = undefined;
-    grid.assignments[availableNeighbour.row][availableNeighbour.col].value = backupValue;
+    let tempGrid = JSON.parse(JSON.stringify(grid));
+    let backupValue = tempGrid.assignments[row][col].value;
+    tempGrid.assignments[row][col].value = undefined;
+    tempGrid.assignments[availableNeighbour.row][availableNeighbour.col].value = backupValue;
 
-    setGrid(grid);
-    console.debug('new grid = ', grid);
+    setGrid(tempGrid);
+    console.debug('new grid = ', tempGrid);
 }
 
 function getButton(grid, setGrid, row, col) {
@@ -78,13 +79,50 @@ function renderGrid(grid, setGrid) {
     })
 }
 
-export function NumberGrid(props) {
-    const [grid, setGridState] = useState(props.initialGrid);
+export function NumberGridTest(props) {
+    const [count, setCount] = useState(1);
 
-    const setGrid = (newGrid)=>{
-      console.log("Setting new grid state", newGrid);
-      setGridState(newGrid);
+    useEffect(() => {
+        if (count > 5) {
+            console.log('Count is more that 5');
+        } else {
+            console.log('Count is less that 5');
+        }
+    }, [count]);
+
+    const handleClick = () => {
+        setCount(count + 1);
+    };
+
+    return (
+        <div>
+            <p>{count}</p>
+
+            <Button onClick={handleClick}>
+                add
+            </Button>
+        </div>
+    );
+}
+
+
+export function NumberGrid(props) {
+    const [grid, setGrid] = useState(props.initialGrid);
+
+    const setGridState = (newGrid) => {
+        console.log("Setting new grid state", newGrid);
+        setGrid(newGrid);
     }
-  
-    return renderGrid(grid, setGrid);
+
+    useEffect(() => {
+        console.log("State updated ...", grid);
+    }, [grid])
+
+    return (
+        <div>
+            <div>
+                { renderGrid(grid, setGridState) }
+            </div>
+        </div>
+    );
 }

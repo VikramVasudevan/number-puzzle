@@ -2,7 +2,7 @@ import logo from './logo.svg';
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-import { NumberGrid } from './NumberGrid/NumberGrid';
+import { NumberGrid, NumberGridTest } from './NumberGrid/NumberGrid';
 
 function uniqueRandomNumbers(max, qty) {
   const retVal = new Set();
