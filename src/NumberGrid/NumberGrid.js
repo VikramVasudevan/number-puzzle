@@ -135,15 +135,12 @@ export function NumberGridTest(props) {
 }
 
 function getNumberOfMovesAlert(movesCount) {
+    let str = `Number of moves = ${movesCount}`
     if (movesCount > 20) {
-        return (<Alert variant="danger">
-            Number of moves - {movesCount}
-        </Alert>);
+        return (<Alert variant="danger">{str}</Alert>);
     }
     else if (movesCount > 10) {
-        return (<Alert variant="warning">
-            Number of moves - {movesCount}
-        </Alert>);
+        return (<Alert variant="warning">{str}</Alert>);
     }
     else
         return (<Alert variant="success">
