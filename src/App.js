@@ -1,10 +1,12 @@
 import logo from './logo.svg';
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { NumberGrid, uniqueRandomNumbers } from './NumberGrid/NumberGrid';
+import { NumberGrid} from './NumberGrid/NumberGrid';
+import { uniqueRandomNumbers} from './NumberGrid/common';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
+import { NumberGridWithRedux } from './NumberGridWithRedux';
 
 let initialGrid = {
   maxNumber: 14,
@@ -32,6 +34,11 @@ function App() {
               <img src={logo} className="App-logo" alt="logo" />
             </Col>
             <Col><NumberGrid initialGrid={initialGrid}></NumberGrid></Col>
+          </Row>
+          <Row>
+            <Col>
+              <NumberGridWithRedux  initialGrid={initialGrid}></NumberGridWithRedux>
+            </Col>
           </Row>
         </Container>
       </header>
