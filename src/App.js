@@ -1,12 +1,14 @@
 import logo from './logo.svg';
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { NumberGrid} from './NumberGrid/NumberGrid';
-import { uniqueRandomNumbers} from './NumberGrid/common';
+import { NumberGrid } from './NumberGrid/NumberGrid';
+import { uniqueRandomNumbers, getTabs } from './NumberGrid/common';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import { NumberGridWithRedux } from './NumberGridWithRedux';
+import Tab from 'react-bootstrap/Tab';
+import Tabs from 'react-bootstrap/Tabs';
 
 let initialGrid = {
   maxNumber: 14,
@@ -28,19 +30,21 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <Container fluid>
-          <Row>
-            <Col>
-              <img src={logo} className="App-logo" alt="logo" />
-            </Col>
-            <Col><NumberGrid initialGrid={initialGrid}></NumberGrid></Col>
-          </Row>
-          <Row>
-            <Col>
-              <NumberGridWithRedux  initialGrid={initialGrid}></NumberGridWithRedux>
-            </Col>
-          </Row>
-        </Container>
+        <Tabs
+          defaultActiveKey="home"
+          id="tab-example"
+          className="mb-3"
+        >
+          <Tab eventKey="home" title="Home">
+            <img src={logo} className="App-logo" alt="logo" />
+          </Tab>
+          <Tab eventKey="reactvanilla" title="React Vanilla">
+            <NumberGrid initialGrid={initialGrid}></NumberGrid>
+          </Tab>
+          <Tab eventKey="reactredux" title="React Redux">
+            <NumberGridWithRedux initialGrid={initialGrid}></NumberGridWithRedux>
+          </Tab>
+        </Tabs>
       </header>
     </div>
   );
