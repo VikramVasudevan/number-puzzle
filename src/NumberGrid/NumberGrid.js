@@ -106,7 +106,6 @@ export function NumberGrid(props) {
 
     return (
         <div>
-            {getNavBar("Number-Puzzle : React-Redux")}
             <Card className="card-primary">
                 <Card.Body>
                     <h2 className="text-primary">

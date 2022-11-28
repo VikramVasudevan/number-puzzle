@@ -174,9 +174,9 @@ export function renderGrid(grid, setGrid) {
 
 export function getNavBar(title) {
     return (
-        <Navbar bg="light" expand="lg">
+        <Navbar bg="dark" expand="lg">
             <Container>
-                <Navbar.Brand href="#home">Number-Puzzle : React-Redux</Navbar.Brand>
+                <Navbar.Brand className="text-light" href="#home">Number-Puzzle : React-Redux</Navbar.Brand>
                 <Navbar.Toggle aria-controls="basic-navbar-nav" />
                 <Navbar.Collapse id="basic-navbar-nav">
                     <Nav className="me-auto">

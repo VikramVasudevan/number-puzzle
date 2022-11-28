@@ -2,7 +2,7 @@ import logo from './logo.svg';
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { NumberGrid } from './NumberGrid/NumberGrid';
-import { uniqueRandomNumbers, getTabs } from './NumberGrid/common';
+import { uniqueRandomNumbers, getNavBar } from './NumberGrid/common';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
@@ -30,21 +30,24 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <Tabs
-          defaultActiveKey="home"
-          id="tab-example"
-          className="mb-3"
-        >
-          <Tab eventKey="home" title="Home">
-            <img src={logo} className="App-logo" alt="logo" />
-          </Tab>
-          <Tab eventKey="reactvanilla" title="React Vanilla">
-            <NumberGrid initialGrid={initialGrid}></NumberGrid>
-          </Tab>
-          <Tab eventKey="reactredux" title="React Redux">
-            <NumberGridWithRedux initialGrid={initialGrid}></NumberGridWithRedux>
-          </Tab>
-        </Tabs>
+        <Container fluid>
+          {getNavBar("Number-Puzzle using React JS")}
+          <Tabs
+            defaultActiveKey="home"
+            id="tab-example"
+            className="mb-3"
+          >
+            <Tab eventKey="home" title="Home">
+              <img src={logo} className="App-logo" alt="logo" />
+            </Tab>
+            <Tab eventKey="reactvanilla" title="React Vanilla">
+              <NumberGrid initialGrid={initialGrid}></NumberGrid>
+            </Tab>
+            <Tab eventKey="reactredux" title="React Redux">
+              <NumberGridWithRedux initialGrid={initialGrid}></NumberGridWithRedux>
+            </Tab>
+          </Tabs>
+        </Container>
       </header>
     </div>
   );

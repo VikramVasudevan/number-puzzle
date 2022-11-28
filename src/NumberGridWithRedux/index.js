@@ -12,7 +12,6 @@ export function NumberGridWithRedux() {
     const setGrid = useCallback((payload) => dispatch(moveButtonRedux(payload)), []);
     return (
         <div>
-            {getNavBar("Number-Puzzle : React-Redux")}
             <table>
                 <tbody>
                     {renderGrid(state.grid, setGrid)}
